@@ -150,6 +150,39 @@ The app is built mobile-first with:
 - Photos are stored in Supabase Storage with public read access
 - Authentication uses Supabase Auth (secure, production-ready)
 
+## Deployment
+
+### Static Export Configuration
+
+The app is configured for static export and works on any static hosting platform.
+
+**Build command:** `npm run build`
+**Output directory:** `out`
+
+### Netlify Deployment
+
+1. Create `netlify.toml` in project root:
+```toml
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+```
+
+2. Set environment variables in Netlify dashboard
+3. Deploy from Git or upload `out` folder
+
+### Vercel Deployment
+
+Vercel auto-detects Next.js. Just connect your repo.
+
+### Important: Supabase Auth Configuration
+
+After deploying, add your domain to Supabase:
+1. Go to Supabase Dashboard → Authentication → URL Configuration
+2. Set "Site URL" to your deployment URL
+3. Add `https://yourdomain.com/**` to "Redirect URLs"
+
 ## Support
 
 For issues or questions, check:

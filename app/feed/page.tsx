@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { supabase, BuffaloCall, Profile, FeedEvent } from '@/lib/supabase';
 import { BottomNav } from '@/components/bottom-nav';
@@ -23,8 +23,7 @@ type FeedItem = BuffaloCall & {
 export default function FeedPage() {
   const { user, profile, loading: authLoading } = useAuth();
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const callRecipientId = searchParams?.get('call');
+  const [callRecipientId, setCallRecipientId] = useState<string | null>(null);
 
   const [loading, setLoading] = useState(true);
   const [feed, setFeed] = useState<FeedItem[]>([]);
@@ -38,8 +37,18 @@ export default function FeedPage() {
   const [activeTab, setActiveTab] = useState('all');
 
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const recipientId = params.get('call');
+      if (recipientId) {
+        setCallRecipientId(recipientId);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
     if (!authLoading && !user) {
-      router.push('/auth');
+      router.push('/auth/');
     } else if (user) {
       loadFeed();
       if (callRecipientId) {
@@ -141,7 +150,7 @@ export default function FeedPage() {
     setCustomMessage('');
     setTimerDuration('60');
     loadFeed();
-    router.push('/feed');
+    router.push('/feed/');
   }
 
   async function handleMediaUpload(callId: string, file: File) {
