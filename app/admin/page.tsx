@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { ArrowLeft, Shield, CheckCircle } from 'lucide-react';
+import { Shield, CheckCircle } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function AdminPage() {
@@ -163,15 +163,6 @@ export default function AdminPage() {
   return (
     <div className="min-h-screen bg-zinc-950 pb-24">
       <div className="bg-gradient-to-br from-purple-600 to-purple-800 text-white p-6">
-        <Button
-          variant="ghost"
-          size="sm"
-          className="text-white hover:bg-white/20 mb-4"
-          onClick={() => router.push('/')}
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back
-        </Button>
         <div className="flex items-center gap-3">
           <Shield className="w-8 h-8" />
           <div>

@@ -9,7 +9,7 @@ import { LoadingScreen } from '@/components/loading-screen';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Beer, TrendingUp, List, Grid3x3, ArrowLeft } from 'lucide-react';
+import { Beer, TrendingUp, List, Grid3x3 } from 'lucide-react';
 
 type BuffaloRelationship = BuffaloBalance & {
   caller: Profile;
@@ -86,15 +86,6 @@ export default function BuffaloBoardPage() {
   return (
     <div className="min-h-screen bg-zinc-950 pb-24">
       <div className="bg-gradient-to-br from-amber-600 to-amber-800 text-white p-6">
-        <Button
-          variant="ghost"
-          size="sm"
-          className="text-white hover:bg-white/20 mb-4 button-press"
-          onClick={() => router.push('/')}
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back
-        </Button>
         <div className="flex items-center gap-3">
           <TrendingUp className="w-8 h-8" />
           <div>

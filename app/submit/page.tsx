@@ -10,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { ArrowLeft, Music, Mic2 } from 'lucide-react';
+import { Music, Mic2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function SubmitPage() {
@@ -98,15 +98,6 @@ export default function SubmitPage() {
   return (
     <div className="min-h-screen bg-zinc-950 pb-24">
       <div className="bg-gradient-to-br from-amber-600 to-amber-800 text-white p-6">
-        <Button
-          variant="ghost"
-          size="sm"
-          className="text-white hover:bg-white/20 mb-4"
-          onClick={() => router.push('/')}
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back
-        </Button>
         <h1 className="text-3xl font-bold mb-2">Submit Predictions</h1>
         <p className="text-amber-100">Predict your {currentYear} Spotify Wrapped</p>
       </div>
