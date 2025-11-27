@@ -188,18 +188,18 @@ export default function ProfilePage() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 gap-3">
-              <div className="text-center p-4 bg-zinc-900 rounded-lg border border-zinc-800">
-                <p className="text-3xl font-semibold text-white">{stats.totalWins}</p>
-                <p className="text-xs text-zinc-500 mt-1.5 font-medium">Championships</p>
+              <div className="text-center p-3 bg-zinc-900 rounded-lg border border-zinc-800">
+                <p className="text-2xl font-semibold text-white">{stats.totalWins}</p>
+                <p className="text-xs text-zinc-500 mt-1 font-medium">Championships</p>
               </div>
-              <div className="text-center p-4 bg-zinc-900 rounded-lg border border-zinc-800">
-                <p className="text-3xl font-semibold text-white">{stats.totalCompetitions}</p>
-                <p className="text-xs text-zinc-500 mt-1.5 font-medium">Competitions</p>
+              <div className="text-center p-3 bg-zinc-900 rounded-lg border border-zinc-800">
+                <p className="text-2xl font-semibold text-white">{stats.totalCompetitions}</p>
+                <p className="text-xs text-zinc-500 mt-1 font-medium">Competitions</p>
               </div>
             </div>
 
             {stats.totalCompetitions > 0 && (
-              <div className="mt-3 py-2.5 px-4 bg-amber-500/5 rounded-lg border border-amber-500/10">
+              <div className="mt-3 py-2 px-3 bg-amber-500/5 rounded-lg border border-amber-500/10">
                 <p className="text-center text-sm text-zinc-300">
                   Win Rate: <span className="font-semibold text-amber-500">
                     {((stats.totalWins / stats.totalCompetitions) * 100).toFixed(0)}%
@@ -219,35 +219,38 @@ export default function ProfilePage() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 gap-3">
-              <div className="text-center p-4 bg-zinc-900 rounded-lg border border-zinc-800">
-                <p className="text-3xl font-semibold text-white">{buffaloLedger.totalOwed}</p>
-                <p className="text-xs text-zinc-500 mt-1.5 font-medium">I Owe</p>
+              <div className="text-center p-3 bg-zinc-900 rounded-lg border border-zinc-800">
+                <p className="text-2xl font-semibold text-white">{buffaloLedger.totalOwed}</p>
+                <p className="text-xs text-zinc-500 mt-1 font-medium">I Owe</p>
               </div>
-              <div className="text-center p-4 bg-zinc-900 rounded-lg border border-zinc-800">
-                <p className="text-3xl font-semibold text-white">{buffaloLedger.totalOwedToMe}</p>
-                <p className="text-xs text-zinc-500 mt-1.5 font-medium">Owed to Me</p>
+              <div className="text-center p-3 bg-zinc-900 rounded-lg border border-zinc-800">
+                <p className="text-2xl font-semibold text-white">{buffaloLedger.totalOwedToMe}</p>
+                <p className="text-xs text-zinc-500 mt-1 font-medium">Owed to Me</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        {activityFeed.length > 0 && (
-          <Card className="border-zinc-800 bg-zinc-900/50">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-base font-medium">Activity Feed</CardTitle>
-            </CardHeader>
-            <CardContent>
+        <Card className="border-zinc-800 bg-zinc-900/50">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base font-medium flex items-center gap-2">
+              <Beer className="w-4 h-4 text-amber-500" />
+              Recent Activity
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {activityFeed.length > 0 ? (
               <div className="space-y-2">
                 {activityFeed.map((event) => (
                   <div
                     key={event.id}
-                    className="px-3 py-2.5 bg-zinc-900 rounded-lg border border-zinc-800"
+                    className="px-3 py-2 bg-zinc-900 rounded-lg border border-zinc-800"
                   >
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-white leading-snug">{event.title}</p>
                         {event.description && (
-                          <p className="text-xs text-zinc-500 mt-1 leading-relaxed">{event.description}</p>
+                          <p className="text-xs text-zinc-500 mt-0.5 leading-relaxed">{event.description}</p>
                         )}
                       </div>
                       <span className="text-xs text-zinc-600 whitespace-nowrap flex-shrink-0">
@@ -257,9 +260,14 @@ export default function ProfilePage() {
                   </div>
                 ))}
               </div>
-            </CardContent>
-          </Card>
-        )}
+            ) : (
+              <div className="text-center py-6">
+                <p className="text-sm text-zinc-500">No recent activity</p>
+                <p className="text-xs text-zinc-600 mt-1">Activity will appear as you participate</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </div>
 
       <BottomNav />

@@ -137,26 +137,26 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-zinc-950 pb-16">
-      <div className="gradient-animate animated-mesh text-white px-6 py-5 pb-8 relative overflow-hidden">
-        <div className="flex items-center justify-between mb-4 animate-fade-in">
-          <div>
-            <h1 className="text-2xl font-bold flex items-center gap-3 tracking-tight">
-              <Beer className="w-7 h-7" />
+      <div className="gradient-animate animated-mesh text-white px-6 py-6 pb-8 relative overflow-hidden">
+        <div className="text-center mb-5 animate-fade-in">
+          <div className="flex items-center justify-center gap-3 mb-2">
+            <Beer className="w-8 h-8" />
+            <h1 className="text-3xl font-bold tracking-tight">
               Buffalo Predictions
             </h1>
-            <p className="text-amber-100 mt-1 text-sm">Welcome back, {profile.display_name}!</p>
           </div>
+          <p className="text-amber-100 text-sm">Welcome back, {profile.display_name}!</p>
         </div>
 
         <div className="bg-black/20 backdrop-blur-sm rounded-xl p-5 border border-white/10 animate-scale-in">
-          <div className="flex items-center justify-center mb-4">
+          <div className="flex items-center justify-center mb-3">
             <div className="text-center">
               <div className="flex items-center justify-center gap-2 mb-2">
-                <Calendar className="w-5 h-5 text-amber-200" />
-                <p className="text-sm text-amber-200 uppercase tracking-wider font-medium">Current Competition</p>
+                <Calendar className="w-4 h-4 text-amber-200" />
+                <p className="text-xs text-amber-200 uppercase tracking-wider font-medium">Current Competition</p>
               </div>
-              <p className="text-5xl font-bold mb-3">{currentYear}</p>
-              <Badge className={`text-base px-6 py-2 ${
+              <p className="text-3xl font-bold mb-2">{currentYear}</p>
+              <Badge className={`text-sm px-4 py-1 ${
                 phase === 'Results In' ? 'bg-green-600' :
                 phase === 'Live' ? 'bg-blue-600' :
                 'bg-zinc-700'

@@ -317,14 +317,14 @@ export default function FeedPage() {
                             className="cursor-pointer hover:text-amber-500 transition-colors"
                             onClick={() => router.push(`/player/${item.caller_id}`)}
                           >
-                            {item.caller.display_name}
+                            {item.caller?.display_name || 'Unknown User'}
                           </span>{' '}
                           called buffalo on{' '}
                           <span
                             className="cursor-pointer hover:text-amber-500 transition-colors"
                             onClick={() => router.push(`/player/${item.recipient_id}`)}
                           >
-                            {item.recipient.display_name}
+                            {item.recipient?.display_name || 'Unknown User'}
                           </span>
                         </p>
                         <p className="text-sm text-zinc-400">
@@ -387,14 +387,14 @@ export default function FeedPage() {
                             className="cursor-pointer hover:text-amber-500 transition-colors"
                             onClick={() => router.push(`/player/${item.caller_id}`)}
                           >
-                            {item.caller.display_name}
+                            {item.caller?.display_name || 'Unknown User'}
                           </span>{' '}
                           called buffalo on{' '}
                           <span
                             className="cursor-pointer hover:text-amber-500 transition-colors"
                             onClick={() => router.push(`/player/${item.recipient_id}`)}
                           >
-                            {item.recipient.display_name}
+                            {item.recipient?.display_name || 'Unknown User'}
                           </span>
                         </p>
                         <p className="text-sm text-zinc-400">
