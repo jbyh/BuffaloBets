@@ -136,12 +136,12 @@ export default function NotificationsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 pb-24">
-      <div className="bg-gradient-to-br from-amber-600 to-amber-800 text-white p-6">
+    <div className="min-h-screen bg-zinc-950 pb-16">
+      <div className="bg-gradient-to-br from-amber-600 to-amber-700 border-b border-zinc-800 px-6 py-5">
         <Button
           variant="ghost"
           size="sm"
-          className="text-white hover:bg-white/20 mb-4 button-press"
+          className="text-white hover:bg-white/20 mb-3 button-press -ml-2"
           onClick={() => router.back()}
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
@@ -149,10 +149,12 @@ export default function NotificationsPage() {
         </Button>
 
         <div className="flex items-center gap-3">
-          <Bell className="w-8 h-8" />
+          <div className="w-10 h-10 flex items-center justify-center flex-shrink-0">
+            <Bell className="w-6 h-6 text-white" />
+          </div>
           <div>
-            <h1 className="text-3xl font-bold">Notifications</h1>
-            <p className="text-amber-100">Buffalo requests & updates</p>
+            <h1 className="text-2xl font-bold text-white tracking-tight">Notifications</h1>
+            <p className="text-sm mt-0.5 text-amber-100">Buffalo requests & updates</p>
           </div>
         </div>
       </div>

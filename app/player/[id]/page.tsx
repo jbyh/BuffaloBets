@@ -120,12 +120,12 @@ export default function PlayerProfilePage() {
   const isOwnProfile = player.id === user?.id;
 
   return (
-    <div className="min-h-screen bg-zinc-950 pb-24">
-      <div className="bg-gradient-to-br from-amber-600 to-amber-800 text-white p-6 pb-12">
+    <div className="min-h-screen bg-zinc-950 pb-16">
+      <div className="bg-gradient-to-br from-amber-600 to-amber-700 border-b border-zinc-800 px-6 py-5 pb-8">
         <Button
           variant="ghost"
           size="sm"
-          className="text-white hover:bg-white/20 mb-4 button-press"
+          className="text-white hover:bg-white/20 mb-3 button-press -ml-2"
           onClick={() => router.back()}
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
@@ -133,15 +133,15 @@ export default function PlayerProfilePage() {
         </Button>
 
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="bg-white/20 p-4 rounded-full">
-              <User className="w-12 h-12" />
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+              <User className="w-6 h-6" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold">{player.display_name}</h1>
-              <p className="text-amber-100">{player.email}</p>
+              <h1 className="text-2xl font-bold tracking-tight">{player.display_name}</h1>
+              <p className="text-amber-100 text-sm">{player.email}</p>
               {isOwnProfile && (
-                <Badge className="mt-2 bg-amber-500">Your Profile</Badge>
+                <Badge className="mt-1.5 bg-amber-500 text-xs">Your Profile</Badge>
               )}
             </div>
           </div>

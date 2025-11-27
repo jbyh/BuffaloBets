@@ -61,7 +61,7 @@ export function BottomNav() {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-zinc-900/95 backdrop-blur-lg border-t border-zinc-800 pb-safe z-50">
+    <nav className="fixed bottom-0 left-0 right-0 bg-zinc-900/95 backdrop-blur-lg border-t border-zinc-800 z-50 safe-area-inset-bottom">
       <div className="flex justify-around items-center h-16">
         {navItems.map((item) => {
           const Icon = item.icon;
@@ -80,14 +80,14 @@ export function BottomNav() {
                   : 'text-zinc-400 hover:text-zinc-300'
               )}
             >
-              {isActive && (
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-12 h-1 bg-amber-500 rounded-b-full animate-scale-in" />
-              )}
               <Icon className={cn(
                 'w-5 h-5 transition-transform',
                 isActive && 'scale-110'
               )} />
               <span className="text-xs font-medium mt-1">{item.label}</span>
+              {isActive && (
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-1 bg-amber-500 rounded-t-full animate-scale-in shadow-[0_0_12px_rgba(245,158,11,0.6)]" />
+              )}
             </Link>
           );
         })}

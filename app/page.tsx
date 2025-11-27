@@ -136,15 +136,15 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950 pb-20">
-      <div className="gradient-animate animated-mesh text-white p-6 pb-8 relative overflow-hidden">
+    <div className="min-h-screen bg-zinc-950 pb-16">
+      <div className="gradient-animate animated-mesh text-white px-6 py-5 pb-8 relative overflow-hidden">
         <div className="flex items-center justify-between mb-4 animate-fade-in">
           <div>
-            <h1 className="text-3xl font-bold flex items-center gap-2">
-              <Beer className="w-8 h-8" />
+            <h1 className="text-2xl font-bold flex items-center gap-3 tracking-tight">
+              <Beer className="w-7 h-7" />
               Buffalo Predictions
             </h1>
-            <p className="text-amber-100 mt-1">Welcome back, {profile.display_name}!</p>
+            <p className="text-amber-100 mt-1 text-sm">Welcome back, {profile.display_name}!</p>
           </div>
         </div>
 

@@ -91,13 +91,15 @@ export default function HistoryPage() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950 pb-24">
-      <div className="bg-gradient-to-br from-amber-600 to-amber-800 text-white p-6">
+    <div className="min-h-screen bg-zinc-950 pb-16">
+      <div className="bg-gradient-to-br from-amber-600 to-amber-700 border-b border-zinc-800 px-6 py-5">
         <div className="flex items-center gap-3 mb-4">
-          <History className="w-8 h-8" />
+          <div className="w-10 h-10 flex items-center justify-center flex-shrink-0">
+            <History className="w-6 h-6 text-white" />
+          </div>
           <div>
-            <h1 className="text-3xl font-bold">History</h1>
-            <p className="text-amber-100">Past competition results</p>
+            <h1 className="text-2xl font-bold text-white tracking-tight">History</h1>
+            <p className="text-sm mt-0.5 text-amber-100">Past competition results</p>
           </div>
         </div>
 

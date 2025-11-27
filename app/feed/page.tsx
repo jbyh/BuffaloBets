@@ -12,7 +12,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Beer, Camera, Upload, Clock, Target, Trophy, Zap, AlertCircle, Play } from 'lucide-react';
+import { Beer, Camera, Upload, Clock, Target, Trophy, Zap, AlertCircle, Play, Newspaper } from 'lucide-react';
 import { toast } from 'sonner';
 import Image from 'next/image';
 
@@ -243,10 +243,17 @@ export default function FeedPage() {
     allActivity.filter(a => a.type === activeTab);
 
   return (
-    <div className="min-h-screen bg-zinc-950 pb-24">
-      <div className="gradient-animate text-white p-6">
-        <h1 className="text-3xl font-bold mb-2">Activity Feed</h1>
-        <p className="text-amber-100">All the action in one place</p>
+    <div className="min-h-screen bg-zinc-950 pb-16">
+      <div className="bg-gradient-to-br from-amber-600 to-amber-700 border-b border-zinc-800 px-6 py-5">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 flex items-center justify-center flex-shrink-0">
+            <Newspaper className="w-6 h-6 text-white" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-white tracking-tight">Activity Feed</h1>
+            <p className="text-sm mt-0.5 text-amber-100">All the action in one place</p>
+          </div>
+        </div>
       </div>
 
       <div className="p-4">

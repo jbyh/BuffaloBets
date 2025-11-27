@@ -153,13 +153,13 @@ export default function ProfilePage() {
   if (!profile) return null;
 
   return (
-    <div className="min-h-screen bg-zinc-950 pb-20">
-      <div className="bg-zinc-900 border-b border-zinc-800 px-5 py-4">
+    <div className="min-h-screen bg-zinc-950 pb-16">
+      <div className="bg-zinc-900 border-b border-zinc-800 px-6 py-5">
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-12 h-12 bg-gradient-to-br from-amber-500 to-amber-700 rounded-full flex items-center justify-center flex-shrink-0">
+          <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-amber-700 rounded-full flex items-center justify-center flex-shrink-0">
             <Beer className="w-6 h-6 text-white" />
           </div>
-          <h1 className="text-xl font-semibold text-white tracking-tight">{profile.display_name}</h1>
+          <h1 className="text-2xl font-bold text-white tracking-tight">{profile.display_name}</h1>
         </div>
 
         <div className="flex items-center justify-between">

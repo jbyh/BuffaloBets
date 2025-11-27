@@ -161,13 +161,15 @@ export default function AdminPage() {
   );
 
   return (
-    <div className="min-h-screen bg-zinc-950 pb-24">
-      <div className="bg-gradient-to-br from-purple-600 to-purple-800 text-white p-6">
+    <div className="min-h-screen bg-zinc-950 pb-16">
+      <div className="bg-gradient-to-br from-purple-600 to-purple-700 border-b border-zinc-800 px-6 py-5">
         <div className="flex items-center gap-3">
-          <Shield className="w-8 h-8" />
+          <div className="w-10 h-10 flex items-center justify-center flex-shrink-0">
+            <Shield className="w-6 h-6 text-white" />
+          </div>
           <div>
-            <h1 className="text-3xl font-bold">Admin Panel</h1>
-            <p className="text-purple-100">Enter actual Spotify results</p>
+            <h1 className="text-2xl font-bold text-white tracking-tight">Admin Panel</h1>
+            <p className="text-sm mt-0.5 text-purple-100">Enter actual Spotify results</p>
           </div>
         </div>
       </div>
