@@ -8,7 +8,7 @@ import { BottomNav } from '@/components/bottom-nav';
 import { LoadingScreen } from '@/components/loading-screen';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Trophy, LogOut, Beer, TrendingUp, Calendar } from 'lucide-react';
+import { Trophy, LogOut, Beer, Calendar } from 'lucide-react';
 import { toast } from 'sonner';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -36,6 +36,36 @@ export default function ProfilePage() {
       router.push('/auth');
     } else if (user) {
       loadProfileData();
+
+      const channel = supabase
+        .channel('profile-changes')
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'buffalo_balances',
+          },
+          () => {
+            loadBuffaloLedger();
+          }
+        )
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'feed_events',
+          },
+          () => {
+            loadActivityFeed();
+          }
+        )
+        .subscribe();
+
+      return () => {
+        supabase.removeChannel(channel);
+      };
     }
   }, [user, authLoading, router]);
 
@@ -123,55 +153,55 @@ export default function ProfilePage() {
   if (!profile) return null;
 
   return (
-    <div className="min-h-screen bg-zinc-950 pb-24">
-      <div className="bg-zinc-900 border-b border-zinc-800 p-4">
+    <div className="min-h-screen bg-zinc-950 pb-20">
+      <div className="bg-zinc-900 border-b border-zinc-800 px-5 py-4">
         <div className="flex items-center gap-3 mb-3">
-          <div className="bg-amber-600/20 p-3 rounded-full">
-            <Beer className="w-6 h-6 text-amber-500" />
+          <div className="w-12 h-12 bg-gradient-to-br from-amber-500 to-amber-700 rounded-full flex items-center justify-center flex-shrink-0">
+            <Beer className="w-6 h-6 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-white">{profile.display_name}</h1>
+          <h1 className="text-xl font-semibold text-white tracking-tight">{profile.display_name}</h1>
         </div>
 
-        <div className="flex items-center justify-between text-sm">
-          <div className="flex items-center gap-2 text-zinc-400">
-            <Calendar className="w-4 h-4" />
-            <span>Member since {new Date(profile.created_at).toLocaleDateString()}</span>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 text-zinc-400 text-sm">
+            <Calendar className="w-3.5 h-3.5" />
+            <span>Member since {new Date(profile.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
           </div>
           <Button
             variant="ghost"
             size="sm"
             onClick={handleSignOut}
-            className="text-zinc-400 hover:text-white"
+            className="h-8 text-zinc-400 hover:text-white hover:bg-zinc-800 -mr-2"
           >
             <LogOut className="w-4 h-4" />
           </Button>
         </div>
       </div>
 
-      <div className="p-4 space-y-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Trophy className="w-5 h-5 text-amber-500" />
+      <div className="px-4 py-5 space-y-4">
+        <Card className="border-zinc-800 bg-zinc-900/50">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base font-medium flex items-center gap-2">
+              <Trophy className="w-4 h-4 text-amber-500" />
               Career Stats
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="text-center p-4 bg-zinc-900 rounded-lg">
-                <p className="text-3xl font-bold text-yellow-500">{stats.totalWins}</p>
-                <p className="text-xs text-zinc-400 mt-1">Championships</p>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="text-center p-4 bg-zinc-900 rounded-lg border border-zinc-800">
+                <p className="text-3xl font-semibold text-white">{stats.totalWins}</p>
+                <p className="text-xs text-zinc-500 mt-1.5 font-medium">Championships</p>
               </div>
-              <div className="text-center p-4 bg-zinc-900 rounded-lg">
-                <p className="text-3xl font-bold text-blue-500">{stats.totalCompetitions}</p>
-                <p className="text-xs text-zinc-400 mt-1">Competitions</p>
+              <div className="text-center p-4 bg-zinc-900 rounded-lg border border-zinc-800">
+                <p className="text-3xl font-semibold text-white">{stats.totalCompetitions}</p>
+                <p className="text-xs text-zinc-500 mt-1.5 font-medium">Competitions</p>
               </div>
             </div>
 
             {stats.totalCompetitions > 0 && (
-              <div className="mt-4 p-4 bg-amber-600/10 rounded-lg border border-amber-600/30">
+              <div className="mt-3 py-2.5 px-4 bg-amber-500/5 rounded-lg border border-amber-500/10">
                 <p className="text-center text-sm text-zinc-300">
-                  Win Rate: <span className="font-bold text-amber-500">
+                  Win Rate: <span className="font-semibold text-amber-500">
                     {((stats.totalWins / stats.totalCompetitions) * 100).toFixed(0)}%
                   </span>
                 </p>
@@ -180,47 +210,47 @@ export default function ProfilePage() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-amber-500" />
+        <Card className="border-zinc-800 bg-zinc-900/50">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base font-medium flex items-center gap-2">
+              <Beer className="w-4 h-4 text-amber-500" />
               Buffalo Ledger
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="text-center p-4 bg-zinc-900 rounded-lg">
-                <p className="text-3xl font-bold text-red-500">{buffaloLedger.totalOwed}</p>
-                <p className="text-xs text-zinc-400 mt-1">I Owe</p>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="text-center p-4 bg-zinc-900 rounded-lg border border-zinc-800">
+                <p className="text-3xl font-semibold text-white">{buffaloLedger.totalOwed}</p>
+                <p className="text-xs text-zinc-500 mt-1.5 font-medium">I Owe</p>
               </div>
-              <div className="text-center p-4 bg-zinc-900 rounded-lg">
-                <p className="text-3xl font-bold text-green-500">{buffaloLedger.totalOwedToMe}</p>
-                <p className="text-xs text-zinc-400 mt-1">Owed to Me</p>
+              <div className="text-center p-4 bg-zinc-900 rounded-lg border border-zinc-800">
+                <p className="text-3xl font-semibold text-white">{buffaloLedger.totalOwedToMe}</p>
+                <p className="text-xs text-zinc-500 mt-1.5 font-medium">Owed to Me</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
         {activityFeed.length > 0 && (
-          <Card>
-            <CardHeader>
-              <CardTitle>Activity Feed</CardTitle>
+          <Card className="border-zinc-800 bg-zinc-900/50">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base font-medium">Activity Feed</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {activityFeed.map((event) => (
                   <div
                     key={event.id}
-                    className="p-3 bg-zinc-900 rounded-lg border border-zinc-800"
+                    className="px-3 py-2.5 bg-zinc-900 rounded-lg border border-zinc-800"
                   >
                     <div className="flex items-start justify-between gap-2">
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-white">{event.title}</p>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-white leading-snug">{event.title}</p>
                         {event.description && (
-                          <p className="text-xs text-zinc-400 mt-1">{event.description}</p>
+                          <p className="text-xs text-zinc-500 mt-1 leading-relaxed">{event.description}</p>
                         )}
                       </div>
-                      <span className="text-xs text-zinc-500 whitespace-nowrap">
+                      <span className="text-xs text-zinc-600 whitespace-nowrap flex-shrink-0">
                         {formatDistanceToNow(new Date(event.created_at), { addSuffix: true })}
                       </span>
                     </div>

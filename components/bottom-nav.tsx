@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, FileText, Newspaper, TrendingUp, User, Bell } from 'lucide-react';
+import { Home, FileText, Newspaper, TrendingUp, User, Bell, BellDot } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/lib/auth-context';
 import { supabase } from '@/lib/supabase';
@@ -11,11 +11,11 @@ import { useEffect, useState } from 'react';
 export function BottomNav() {
   const pathname = usePathname();
   const { user } = useAuth();
-  const [notificationCount, setNotificationCount] = useState(0);
+  const [hasPendingRequests, setHasPendingRequests] = useState(false);
 
   useEffect(() => {
     if (user) {
-      loadNotificationCount();
+      loadNotificationStatus();
 
       const channel = supabase
         .channel('notifications-changes')
@@ -28,7 +28,7 @@ export function BottomNav() {
             filter: `recipient_id=eq.${user.id}`,
           },
           () => {
-            loadNotificationCount();
+            loadNotificationStatus();
           }
         )
         .subscribe();
@@ -39,16 +39,16 @@ export function BottomNav() {
     }
   }, [user]);
 
-  async function loadNotificationCount() {
+  async function loadNotificationStatus() {
     if (!user) return;
 
-    const { data } = await supabase
+    const { data, count } = await supabase
       .from('buffalo_requests')
       .select('id', { count: 'exact', head: true })
       .eq('recipient_id', user.id)
       .eq('status', 'pending');
 
-    setNotificationCount(data?.length || 0);
+    setHasPendingRequests((count || 0) > 0);
   }
 
   const navItems = [
@@ -56,7 +56,7 @@ export function BottomNav() {
     { href: '/submit', icon: FileText, label: 'Submit' },
     { href: '/buffalo-board', icon: TrendingUp, label: 'Buffalo' },
     { href: '/feed', icon: Newspaper, label: 'Feed' },
-    { href: '/notifications', icon: Bell, label: 'Alerts', badge: notificationCount },
+    { href: '/notifications', icon: hasPendingRequests ? BellDot : Bell, label: 'Alerts', hasAlert: hasPendingRequests },
     { href: '/profile', icon: User, label: 'Profile' },
   ];
 
@@ -75,16 +75,13 @@ export function BottomNav() {
                 'flex flex-col items-center justify-center flex-1 h-full transition-all duration-200 relative button-press',
                 isActive
                   ? 'text-amber-500'
+                  : item.hasAlert
+                  ? 'text-amber-400 hover:text-amber-300'
                   : 'text-zinc-400 hover:text-zinc-300'
               )}
             >
               {isActive && (
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-12 h-1 bg-amber-500 rounded-b-full animate-scale-in" />
-              )}
-              {item.badge && item.badge > 0 && (
-                <div className="absolute top-2 right-1/2 translate-x-4 bg-red-600 text-white text-[10px] font-bold rounded-full min-w-[16px] h-4 px-1 flex items-center justify-center">
-                  {item.badge > 9 ? '9+' : item.badge}
-                </div>
               )}
               <Icon className={cn(
                 'w-5 h-5 transition-transform',

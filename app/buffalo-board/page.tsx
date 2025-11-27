@@ -30,6 +30,25 @@ export default function BuffaloBoardPage() {
       router.push('/auth');
     } else if (user) {
       loadData();
+
+      const channel = supabase
+        .channel('buffalo-board-changes')
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'buffalo_balances',
+          },
+          () => {
+            loadData();
+          }
+        )
+        .subscribe();
+
+      return () => {
+        supabase.removeChannel(channel);
+      };
     }
   }, [user, authLoading, router]);
 
@@ -89,7 +108,7 @@ export default function BuffaloBoardPage() {
         <div className="flex items-center gap-3">
           <TrendingUp className="w-8 h-8" />
           <div>
-            <h1 className="text-3xl font-bold">Buffalo Board</h1>
+            <h1 className="text-3xl font-bold">Buffalo Billables</h1>
             <p className="text-amber-100">Who has buffalos on whom</p>
           </div>
         </div>
