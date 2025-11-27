@@ -91,7 +91,7 @@ export default function NotificationsPage() {
     if (accept) {
       const currentYear = new Date().getFullYear();
 
-      const { data: existingBalance } = await supabase
+      const { data: existingBalance, error: balanceCheckError } = await supabase
         .from('buffalo_balances')
         .select('*')
         .eq('caller_id', request.requester_id)
@@ -99,21 +99,42 @@ export default function NotificationsPage() {
         .eq('year', currentYear)
         .maybeSingle();
 
+      if (balanceCheckError) {
+        console.error('Error checking balance:', balanceCheckError);
+        toast.error('Failed to check buffalo balance');
+        setResponding(null);
+        return;
+      }
+
       if (existingBalance) {
-        await supabase
+        const { error: updateError } = await supabase
           .from('buffalo_balances')
           .update({ balance: existingBalance.balance + 1 })
           .eq('id', existingBalance.id);
+
+        if (updateError) {
+          console.error('Error updating balance:', updateError);
+          toast.error('Failed to update buffalo balance');
+          setResponding(null);
+          return;
+        }
       } else {
-        await supabase.from('buffalo_balances').insert({
+        const { error: insertError } = await supabase.from('buffalo_balances').insert({
           year: currentYear,
           caller_id: request.requester_id,
           recipient_id: user.id,
           balance: 1,
         });
+
+        if (insertError) {
+          console.error('Error inserting balance:', insertError);
+          toast.error('Failed to create buffalo balance');
+          setResponding(null);
+          return;
+        }
       }
 
-      await supabase.from('feed_events').insert({
+      const { error: feedError } = await supabase.from('feed_events').insert({
         event_type: 'buffalo_accepted',
         user_id: request.requester_id,
         related_user_id: user.id,
@@ -121,6 +142,10 @@ export default function NotificationsPage() {
         title: `${profile.display_name} accepted a buffalo from ${request.requester.display_name}`,
         description: request.note || 'Buffalo accepted!',
       });
+
+      if (feedError) {
+        console.error('Error creating feed event:', feedError);
+      }
 
       toast.success(`Buffalo accepted! ${request.requester.display_name} now has a buffalo on you.`);
     } else {
