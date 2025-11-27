@@ -76,6 +76,15 @@ export function BuffaloRequestDialog({
       console.error('Failed to create notification:', notifError);
     }
 
+    await supabase.from('feed_events').insert({
+      event_type: 'buffalo_request',
+      user_id: user.id,
+      related_user_id: recipient.id,
+      year: currentYear,
+      title: `${profile.display_name} requested a buffalo on ${recipient.display_name}`,
+      description: note.trim() || 'Buffalo request sent',
+    });
+
     toast.success(`Buffalo request sent to ${recipient.display_name}!`);
     setNote('');
     setSubmitting(false);

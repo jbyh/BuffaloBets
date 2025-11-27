@@ -178,20 +178,26 @@ export default function PlayerProfilePage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-3 gap-4">
-              <div className="text-center p-4 bg-zinc-900 rounded-lg">
-                <p className="text-3xl font-bold text-yellow-500">{stats.totalWins}</p>
-                <p className="text-xs text-zinc-400 mt-1">Championships</p>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="text-center p-4 bg-zinc-900 rounded-lg border border-zinc-800">
+                <p className="text-3xl font-semibold text-white">{stats.totalWins}</p>
+                <p className="text-xs text-zinc-500 mt-1.5 font-medium">Championships</p>
               </div>
-              <div className="text-center p-4 bg-zinc-900 rounded-lg">
-                <p className="text-3xl font-bold text-blue-500">{stats.totalCompetitions}</p>
-                <p className="text-xs text-zinc-400 mt-1">Competitions</p>
-              </div>
-              <div className="text-center p-4 bg-zinc-900 rounded-lg">
-                <p className="text-3xl">{stats.bestRank > 0 ? getRankEmoji(stats.bestRank) : '-'}</p>
-                <p className="text-xs text-zinc-400 mt-1">Best Finish</p>
+              <div className="text-center p-4 bg-zinc-900 rounded-lg border border-zinc-800">
+                <p className="text-3xl font-semibold text-white">{stats.totalCompetitions}</p>
+                <p className="text-xs text-zinc-500 mt-1.5 font-medium">Competitions</p>
               </div>
             </div>
+
+            {stats.totalCompetitions > 0 && (
+              <div className="mt-3 py-2.5 px-4 bg-amber-500/5 rounded-lg border border-amber-500/10">
+                <p className="text-center text-sm text-zinc-300">
+                  Win Rate: <span className="font-semibold text-amber-500">
+                    {((stats.totalWins / stats.totalCompetitions) * 100).toFixed(0)}%
+                  </span>
+                </p>
+              </div>
+            )}
           </CardContent>
         </Card>
 

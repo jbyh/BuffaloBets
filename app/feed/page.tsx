@@ -46,6 +46,36 @@ export default function FeedPage() {
       if (callRecipientId) {
         loadRecipientAndShowDialog(callRecipientId);
       }
+
+      const channel = supabase
+        .channel('feed-changes')
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'feed_events',
+          },
+          () => {
+            loadFeed();
+          }
+        )
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'buffalo_calls',
+          },
+          () => {
+            loadFeed();
+          }
+        )
+        .subscribe();
+
+      return () => {
+        supabase.removeChannel(channel);
+      };
     }
   }, [user, authLoading, router, callRecipientId]);
 
@@ -216,6 +246,7 @@ export default function FeedPage() {
     switch (type) {
       case 'submission': return <Target className="w-4 h-4" />;
       case 'buffalo_call': return <Beer className="w-4 h-4" />;
+      case 'buffalo_request': return <Beer className="w-4 h-4" />;
       case 'result': return <Trophy className="w-4 h-4" />;
       default: return <Zap className="w-4 h-4" />;
     }
@@ -266,8 +297,77 @@ export default function FeedPage() {
         </Tabs>
 
         <div className="space-y-4">
-          {activeTab === 'buffalos' || activeTab === 'all' ? (
-            feed.map((item) => {
+          {activeTab === 'all' && allActivity.map((item: any) => {
+            if (item.type === 'buffalo_call') {
+              const timeRemaining = getTimeRemaining(item.timer_deadline || null);
+              const isExpired = timeRemaining === 'Expired';
+              const isPending = item.status === 'pending' && !isExpired;
+
+              return (
+                <Card key={`call-${item.id}`} className="card-hover animate-slide-up">
+                  <CardContent className="p-4 space-y-3">
+                    <div className="flex items-start gap-3">
+                      <div className={`p-2 rounded-lg ${isPending ? 'bg-amber-600 animate-pulse-slow' : 'bg-amber-600'}`}>
+                        <Beer className="w-5 h-5 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-medium">
+                          <span
+                            className="cursor-pointer hover:text-amber-500 transition-colors"
+                            onClick={() => router.push(`/player/${item.caller_id}`)}
+                          >
+                            {item.caller.display_name}
+                          </span>{' '}
+                          called buffalo on{' '}
+                          <span
+                            className="cursor-pointer hover:text-amber-500 transition-colors"
+                            onClick={() => router.push(`/player/${item.recipient_id}`)}
+                          >
+                            {item.recipient.display_name}
+                          </span>
+                        </p>
+                        <p className="text-sm text-zinc-400">
+                          {new Date(item.called_at).toLocaleString()}
+                        </p>
+                        {item.message && (
+                          <p className="text-sm text-zinc-300 mt-1 italic">"{item.message}"</p>
+                        )}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            } else {
+              return (
+                <Card key={`event-${item.id}`} className="card-hover animate-slide-up">
+                  <CardContent className="p-4">
+                    <div className="flex items-start gap-3">
+                      <div className={`p-2 rounded-lg ${
+                        item.event_type === 'buffalo_request' ? 'bg-amber-600' :
+                        item.event_type === 'buffalo_call' ? 'bg-amber-600' :
+                        item.event_type === 'submission' ? 'bg-blue-600' :
+                        item.event_type === 'result' ? 'bg-green-600' :
+                        'bg-zinc-600'
+                      }`}>
+                        {getEventIcon(item.event_type)}
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-medium">{item.title}</p>
+                        {item.description && (
+                          <p className="text-sm text-zinc-400 mt-1">{item.description}</p>
+                        )}
+                        <p className="text-xs text-zinc-500 mt-2">
+                          {new Date(item.created_at).toLocaleString()}
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            }
+          })}
+
+          {activeTab === 'buffalos' && feed.map((item) => {
               const timeRemaining = getTimeRemaining(item.timer_deadline || null);
               const isExpired = timeRemaining === 'Expired';
               const isPending = item.status === 'pending' && !isExpired;
@@ -379,31 +479,7 @@ export default function FeedPage() {
                   </CardContent>
                 </Card>
               );
-            })
-          ) : null}
-
-          {(activeTab === 'submission' || activeTab === 'all') && feedEvents
-            .filter(e => activeTab === 'all' || e.event_type === activeTab)
-            .map((event) => (
-              <Card key={event.id} className="card-hover animate-slide-up">
-                <CardContent className="p-4">
-                  <div className="flex items-start gap-3">
-                    <div className="bg-blue-600 p-2 rounded-lg">
-                      {getEventIcon(event.event_type)}
-                    </div>
-                    <div className="flex-1">
-                      <p className="font-medium">{event.title}</p>
-                      {event.description && (
-                        <p className="text-sm text-zinc-400 mt-1">{event.description}</p>
-                      )}
-                      <p className="text-xs text-zinc-500 mt-2">
-                        {new Date(event.created_at).toLocaleString()}
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+            })}
 
           {filteredActivity.length === 0 && (
             <Card>

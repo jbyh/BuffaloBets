@@ -86,7 +86,7 @@ export function BottomNav() {
               )} />
               <span className="text-xs font-medium mt-1">{item.label}</span>
               {isActive && (
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-1 bg-amber-500 rounded-t-full animate-scale-in shadow-[0_0_12px_rgba(245,158,11,0.6)]" />
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-amber-500 rounded-t-full animate-scale-in shadow-[0_0_12px_rgba(245,158,11,0.6)]" />
               )}
             </Link>
           );
