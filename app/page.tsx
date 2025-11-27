@@ -83,8 +83,16 @@ export default function HomePage() {
     setLoading(false);
   }
 
-  if (authLoading || loading) {
+  if (authLoading) {
     return <LoadingScreen />;
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
+        <Beer className="w-8 h-8 text-amber-500 animate-pulse" />
+      </div>
+    );
   }
 
   if (!profile) return null;
@@ -97,8 +105,8 @@ export default function HomePage() {
 
   const getCompetitionPhase = () => {
     if (score) return 'Results In';
-    if (submittedCount === 0) return 'Pre-Season';
-    if (submittedCount < totalPlayers) return 'Submissions Open';
+    if (submittedCount === 0) return 'Live';
+    if (submittedCount < totalPlayers) return 'Live';
     return 'Results Pending';
   };
 
@@ -140,22 +148,22 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="bg-black/20 backdrop-blur-sm rounded-xl p-4 border border-white/10 animate-scale-in">
-          <div className="flex items-center justify-between mb-3">
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <Calendar className="w-4 h-4 text-amber-200" />
-                <p className="text-sm text-amber-200">Current Competition</p>
+        <div className="bg-black/20 backdrop-blur-sm rounded-xl p-5 border border-white/10 animate-scale-in">
+          <div className="flex items-center justify-center mb-4">
+            <div className="text-center">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <Calendar className="w-5 h-5 text-amber-200" />
+                <p className="text-sm text-amber-200 uppercase tracking-wider font-medium">Current Competition</p>
               </div>
-              <p className="text-4xl font-bold">{currentYear}</p>
+              <p className="text-5xl font-bold mb-3">{currentYear}</p>
+              <Badge className={`text-base px-6 py-2 ${
+                phase === 'Results In' ? 'bg-green-600' :
+                phase === 'Live' ? 'bg-blue-600' :
+                'bg-zinc-700'
+              }`}>
+                {phase}
+              </Badge>
             </div>
-            <Badge className={`text-lg px-4 py-2 ${
-              phase === 'Results In' ? 'bg-green-600' :
-              phase === 'Submissions Open' ? 'bg-blue-600' :
-              'bg-zinc-700'
-            }`}>
-              {phase}
-            </Badge>
           </div>
 
           {phase !== 'Results In' && (

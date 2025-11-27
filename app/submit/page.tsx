@@ -83,8 +83,16 @@ export default function SubmitPage() {
     setSaving(false);
   }
 
-  if (authLoading || loading) {
+  if (authLoading) {
     return <LoadingScreen />;
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
+        <Music className="w-8 h-8 text-amber-500 animate-pulse" />
+      </div>
+    );
   }
 
   return (

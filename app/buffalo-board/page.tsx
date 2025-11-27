@@ -48,8 +48,16 @@ export default function BuffaloBoardPage() {
     setLoading(false);
   }
 
-  if (authLoading || loading) {
+  if (authLoading) {
     return <LoadingScreen />;
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
+        <Beer className="w-8 h-8 text-amber-500 animate-pulse" />
+      </div>
+    );
   }
 
   const getBuffalosBetween = (callerId: string, recipientId: string) => {

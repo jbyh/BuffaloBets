@@ -81,18 +81,18 @@ export function BottomNav() {
               {isActive && (
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-12 h-1 bg-amber-500 rounded-b-full animate-scale-in" />
               )}
-              <div className="relative">
+              <div className="relative inline-block">
                 <Icon className={cn(
-                  'w-5 h-5 mb-1 transition-transform',
+                  'w-5 h-5 transition-transform',
                   isActive && 'scale-110'
                 )} />
                 {item.badge && item.badge > 0 && (
-                  <div className="absolute -top-1 -right-2 bg-red-600 text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center animate-pulse">
+                  <div className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] font-bold rounded-full min-w-[16px] h-4 px-1 flex items-center justify-center">
                     {item.badge > 9 ? '9+' : item.badge}
                   </div>
                 )}
               </div>
-              <span className="text-xs font-medium">{item.label}</span>
+              <span className="text-xs font-medium mt-1">{item.label}</span>
             </Link>
           );
         })}

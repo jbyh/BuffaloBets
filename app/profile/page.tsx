@@ -8,7 +8,7 @@ import { BottomNav } from '@/components/bottom-nav';
 import { LoadingScreen } from '@/components/loading-screen';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { User, Trophy, LogOut, Crown } from 'lucide-react';
+import { User, Trophy, LogOut, Crown, Beer } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function ProfilePage() {
@@ -55,8 +55,16 @@ export default function ProfilePage() {
     router.push('/auth');
   }
 
-  if (authLoading || loading) {
+  if (authLoading) {
     return <LoadingScreen />;
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
+        <Beer className="w-8 h-8 text-amber-500 animate-pulse" />
+      </div>
+    );
   }
 
   if (!profile) return null;
@@ -71,18 +79,16 @@ export default function ProfilePage() {
   return (
     <div className="min-h-screen bg-zinc-950 pb-24">
       <div className="bg-gradient-to-br from-amber-600 to-amber-800 text-white p-6 pb-12">
-        <div className="flex items-center gap-4 mb-6">
-          <div className="bg-white/20 p-4 rounded-full">
-            <User className="w-12 h-12" />
+        <div className="flex flex-col items-center text-center mb-6">
+          <div className="bg-white/20 p-6 rounded-full mb-4">
+            <Beer className="w-16 h-16" />
           </div>
-          <div>
-            <h1 className="text-3xl font-bold">{profile.display_name}</h1>
-            <p className="text-amber-100">{profile.email}</p>
-          </div>
+          <h1 className="text-3xl font-bold">{profile.display_name}</h1>
+          <p className="text-amber-100 mt-1">{profile.email}</p>
         </div>
 
         {profile.is_admin && (
-          <div className="bg-purple-600/30 border border-purple-400 rounded-lg p-3 flex items-center gap-2">
+          <div className="bg-purple-600/30 border border-purple-400 rounded-lg p-3 flex items-center justify-center gap-2">
             <Crown className="w-5 h-5 text-purple-300" />
             <p className="text-sm font-medium text-purple-100">Admin Account</p>
           </div>

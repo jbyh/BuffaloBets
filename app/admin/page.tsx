@@ -144,8 +144,16 @@ export default function AdminPage() {
     toast.success('All scores calculated and buffalos awarded!');
   }
 
-  if (authLoading || loading) {
+  if (authLoading) {
     return <LoadingScreen />;
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
+        <Shield className="w-8 h-8 text-purple-500 animate-pulse" />
+      </div>
+    );
   }
 
   const usersWithSubmissions = allProfiles.filter(p =>
